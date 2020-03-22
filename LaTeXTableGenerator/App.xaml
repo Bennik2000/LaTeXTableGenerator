@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:LaTeXTableGenerator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary Source="UI/Style/DataGridStyle.xaml"/>
     </Application.Resources>
 </Application>

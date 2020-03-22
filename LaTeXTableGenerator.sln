@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaTeXTableGenerator", "LaTeXTableGenerator\LaTeXTableGenerator.csproj", "{932D47DA-CCC0-4CFD-B366-078FB7C56D70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaTeXTableGenerator.Test", "LaTeXTableGenerator.Test\LaTeXTableGenerator.Test.csproj", "{622DDDC1-1CBE-4E2A-A315-54E291F99E1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{932D47DA-CCC0-4CFD-B366-078FB7C56D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{932D47DA-CCC0-4CFD-B366-078FB7C56D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{932D47DA-CCC0-4CFD-B366-078FB7C56D70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{622DDDC1-1CBE-4E2A-A315-54E291F99E1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{622DDDC1-1CBE-4E2A-A315-54E291F99E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{622DDDC1-1CBE-4E2A-A315-54E291F99E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{622DDDC1-1CBE-4E2A-A315-54E291F99E1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

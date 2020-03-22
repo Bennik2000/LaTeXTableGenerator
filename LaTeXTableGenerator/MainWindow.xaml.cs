@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LaTeXTableGenerator
 {
@@ -23,6 +11,26 @@ namespace LaTeXTableGenerator
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_OnAutoGeneratingColumn(
+            object sender, 
+            DataGridAutoGeneratingColumnEventArgs e)
+        {
+            var dataTemplate = (DataTemplate) Resources["CellDataTemplate"];
+            var editDataTemplate = (DataTemplate) Resources["EditCellDataTemplate"];
+
+            var column = new DataGridTemplateColumn()
+            {
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star),
+                CellTemplate = dataTemplate,
+                CellEditingTemplate = editDataTemplate,
+                Header = e.Column.Header,
+                HeaderTemplate = e.Column.HeaderTemplate,
+                HeaderStringFormat = e.Column.HeaderStringFormat,
+                SortMemberPath = e.PropertyName // this is used to index into the DataRowView so it MUST be the property's name (for this implementation anyways)
+            };
+            e.Column = column;
         }
     }
 }

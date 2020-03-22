@@ -3,10 +3,108 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LaTeXTableGenerator"
+        xmlns:viewModels="clr-namespace:LaTeXTableGenerator.UI.ViewModels"
+        xmlns:converter="clr-namespace:LaTeXTableGenerator.UI.Converter"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:LaTeXTableGenerator.UI.Behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <converter:DataRowViewConverter x:Key="DataRowViewConverter" />
+        <DataTemplate x:Key="CellDataTemplate">
+            <TextBlock Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                       Margin="5, 10"
+                       Height="20"
+                       VerticalAlignment="Center"
+                       DataContext="{Binding
+                RelativeSource={RelativeSource AncestorType=DataGridCell}, 
+                Converter={StaticResource DataRowViewConverter}}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBold}"
+                                         Value="True">
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsItalic}"
+                                         Value="True">
+                                <Setter Property="FontStyle"
+                                        Value="Italic" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="EditCellDataTemplate">
+            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     Margin="5, 10"
+                     Height="20"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     DataContext="{Binding
+                RelativeSource={RelativeSource AncestorType=DataGridCell}, 
+                Converter={StaticResource DataRowViewConverter}}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBold}"
+                                         Value="True">
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsItalic}"
+                                         Value="True">
+                                <Setter Property="FontStyle"
+                                        Value="Italic" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
-        
+        <DataGrid ItemsSource="{Binding TableViewModel.TableItemsSource}"
+                  Style="{StaticResource DataGridStyle}"
+                  AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+                  AutoGenerateColumns="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserSortColumns="False"
+                  CanUserResizeColumns="False"
+                  CanUserReorderColumns="False"
+                  CanUserResizeRows="False"
+                  SelectionMode="Extended"
+                  SelectionUnit="Cell">
+            <b:Interaction.Behaviors>
+                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=OneWayToSource}">
+                </behaviors:MultiSelectBehavior>
+            </b:Interaction.Behaviors> 
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem IsChecked="{Binding TableViewModel.ContextMenuBoldChecked}"
+                              IsCheckable="True">
+                        <MenuItem.Header>
+                            <TextBlock Text="Bold"
+                                       FontWeight="Bold"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem IsChecked="{Binding TableViewModel.ContextMenuItalicChecked}"
+                              IsCheckable="True">
+                        <MenuItem.Header>
+                            <TextBlock Text="Italic" FontStyle="Italic"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
     </Grid>
 </Window>
