@@ -16,7 +16,14 @@ namespace LaTeXTableGenerator.UI.Converter
 
             var cellDataContext = cell?.DataContext as DataRowView;
 
-            return cellDataContext?.Row[cell.Column.SortMemberPath];
+            try
+            {
+                return cellDataContext?.Row[cell.Column.SortMemberPath];
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

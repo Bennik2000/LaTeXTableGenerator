@@ -65,9 +65,12 @@
     <Compile Include="UI\Converter\DataRowViewConverter.cs" />
     <Compile Include="UI\ViewModels\CellViewModel.cs" />
     <Compile Include="UI\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="UI\ViewModels\OutputViewModel.cs" />
     <Compile Include="UI\ViewModels\RowViewModel.cs" />
     <Compile Include="UI\ViewModels\TableViewModel.cs" />
     <Compile Include="UI\ViewModels\ViewModelBase.cs" />
+    <Compile Include="Utils\EnumerableExtensions.cs" />
+    <Compile Include="Utils\RelayCommand.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,6 +120,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\AddColumn.png" />
+    <Resource Include="Resources\AddRow.png" />
+    <Resource Include="Resources\DeleteColumn.png" />
+    <Resource Include="Resources\DeleteTableRow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

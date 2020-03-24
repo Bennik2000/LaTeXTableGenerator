@@ -1,13 +1,21 @@
-﻿using System;
+﻿using LaTeXTableGenerator.Model;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LaTeXTableGenerator.UI.ViewModels
 {
-    class RowViewModel : ViewModelBase
+    public class RowViewModel : ViewModelBase
     {
+        public List<CellViewModel> Cells { get; set; }
 
+        public RowViewModel(List<CellViewModel> cells)
+        {
+            Cells = cells;
+        }
+
+        public Row ToRow()
+        {
+            return new Row(Cells.Select(c => c.ToCell()).ToList());
+        }
     }
 }

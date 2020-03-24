@@ -72,7 +72,53 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <DataGrid ItemsSource="{Binding TableViewModel.TableItemsSource}"
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Button Content="Load Table" 
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Left"/>
+        </Grid>
+
+        <Menu Grid.Row="1" Grid.Column="0">
+            <MenuItem ToolTip="Add Row"
+                      Command="{Binding TableViewModel.AddRowCommand}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddRow.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem ToolTip="Add Column"
+                      Command="{Binding TableViewModel.AddColumnCommand}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumn.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem ToolTip="Delete Row"
+                      Command="{Binding TableViewModel.DeleteRowCommand}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteTableRow.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem ToolTip="Delete Column"
+                      Command="{Binding TableViewModel.DeleteColumnCommand}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
+
+        <DataGrid Grid.Row="2" Grid.Column="0"
+                  ItemsSource="{Binding TableViewModel.TableItemsSource}"
                   Style="{StaticResource DataGridStyle}"
                   AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
                   AutoGenerateColumns="True"
@@ -85,7 +131,7 @@
                   SelectionMode="Extended"
                   SelectionUnit="Cell">
             <b:Interaction.Behaviors>
-                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=OneWayToSource}">
+                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=TwoWay}">
                 </behaviors:MultiSelectBehavior>
             </b:Interaction.Behaviors> 
             <DataGrid.ContextMenu>
@@ -106,5 +152,12 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
+
+        <TextBox IsReadOnly="True" 
+                 Grid.Column="1" 
+                 Grid.Row="2"
+                 Text="{Binding OutputViewModel.Code}" 
+                 FontFamily="Consolas" 
+                 Margin="10"/>
     </Grid>
 </Window>

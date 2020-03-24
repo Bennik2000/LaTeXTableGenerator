@@ -1,4 +1,5 @@
-﻿using Microsoft.Xaml.Behaviors;
+﻿using System;
+using Microsoft.Xaml.Behaviors;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Data;
@@ -47,6 +48,7 @@ namespace LaTeXTableGenerator.UI.Behaviors
         private static void PropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             NotifyCollectionChangedEventHandler handler = (s, e) => SelectedItemsChanged(sender, e);
+
             if (args.OldValue is ObservableCollection<object>)
             {
                 (args.OldValue as ObservableCollection<object>).CollectionChanged -= handler;
@@ -60,30 +62,29 @@ namespace LaTeXTableGenerator.UI.Behaviors
 
         private static void SelectedItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (sender is MultiSelectBehavior)
-            {
-                var listViewBase = (sender as MultiSelectBehavior).AssociatedObject;
+            if (!(sender is MultiSelectBehavior)) return;
 
-                var listSelectedItems = listViewBase.SelectedItems;
-                if (e.OldItems != null)
+            var listViewBase = ((MultiSelectBehavior) sender).AssociatedObject;
+
+            var listSelectedItems = listViewBase.SelectedItems;
+            if (e.OldItems != null)
+            {
+                foreach (var item in e.OldItems)
                 {
-                    foreach (var item in e.OldItems)
+                    if (listSelectedItems.Contains(item))
                     {
-                        if (listSelectedItems.Contains(item))
-                        {
-                            listSelectedItems.Remove(item);
-                        }
+                        listSelectedItems.Remove(item);
                     }
                 }
+            }
 
-                if (e.NewItems != null)
+            if (e.NewItems != null)
+            {
+                foreach (var item in e.NewItems)
                 {
-                    foreach (var item in e.NewItems)
+                    if (!listSelectedItems.Contains(item))
                     {
-                        if (!listSelectedItems.Contains(item))
-                        {
-                            listSelectedItems.Add(item);
-                        }
+                        listSelectedItems.Add(item);
                     }
                 }
             }
@@ -95,7 +96,15 @@ namespace LaTeXTableGenerator.UI.Behaviors
 
             var cellDataContext = cell.Item as DataRowView;
 
-            return cellDataContext?.Row[cell.Column.SortMemberPath];
+            try
+            {
+                return cellDataContext?.Row[cell.Column.SortMemberPath];
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
         }
 
         private void OnSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)

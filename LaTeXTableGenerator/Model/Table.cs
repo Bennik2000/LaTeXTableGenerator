@@ -7,8 +7,8 @@ namespace LaTeXTableGenerator.Model
     {
         public List<Row> Rows { get; }
         
-        public int RowCount { get; set; }
-        public int ColumnCount { get; set; }
+        public int RowCount { get; private set; }
+        public int ColumnCount { get; private set; }
 
         public string TableCaption { get; set; }
 
@@ -20,6 +20,15 @@ namespace LaTeXTableGenerator.Model
 
             Rows = rows;
         }
+
+        public Table(int rows, int columns)
+        {
+            TableCaption = string.Empty;
+            Rows = new List<Row>();
+
+            InitializeTable(rows, columns);
+        }
+
 
         private void ValidateRows(List<Row> rows)
         {
@@ -39,14 +48,6 @@ namespace LaTeXTableGenerator.Model
 
             ColumnCount = columnCount;
             RowCount = rows.Count;
-        }
-
-        public Table(int rows, int columns)
-        {
-            TableCaption = string.Empty;
-            Rows = new List<Row>();
-
-            InitializeTable(rows, columns);
         }
 
         private void InitializeTable(int rows, int columns)
@@ -85,6 +86,8 @@ namespace LaTeXTableGenerator.Model
             {
                 Rows.Insert(index, GenerateRow(ColumnCount));
             }
+
+            RowCount++;
         }
 
         public void AddColumn(int index = -1)
@@ -100,11 +103,14 @@ namespace LaTeXTableGenerator.Model
                     row.Cells.Insert(index, new Cell());
                 }
             }
+
+            ColumnCount++;
         }
 
         public void RemoveRow(int index)
         {
             Rows.RemoveAt(index);
+            RowCount--;
         }
 
         public void RemoveColumn(int index)
@@ -113,7 +119,8 @@ namespace LaTeXTableGenerator.Model
             {
                 row.Cells.RemoveAt(index);
             }
+
+            ColumnCount--;
         }
-        
     }
 }
