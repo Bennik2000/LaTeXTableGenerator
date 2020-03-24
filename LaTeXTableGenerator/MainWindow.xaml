@@ -97,11 +97,26 @@
                     <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddRow.png" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem ToolTip="Add Column"
-                      Command="{Binding TableViewModel.AddColumnCommand}">
+            <MenuItem ToolTip="Add Column">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumn.png"/>
                 </MenuItem.Icon>
+                <MenuItem.Items>
+                    <MenuItem ToolTip="Add a column to the left"
+                              Header="To the left"
+                              Command="{Binding TableViewModel.AddColumnLeftCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToLeft.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem ToolTip="Add a column to the right"
+                              Header="To the rights"
+                              Command="{Binding TableViewModel.AddColumnRightCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToRight.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem.Items>
             </MenuItem>
             <MenuItem ToolTip="Delete Row"
                       Command="{Binding TableViewModel.DeleteRowCommand}">
@@ -131,8 +146,7 @@
                   SelectionMode="Extended"
                   SelectionUnit="Cell">
             <b:Interaction.Behaviors>
-                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=TwoWay}">
-                </behaviors:MultiSelectBehavior>
+                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=TwoWay}"/>
             </b:Interaction.Behaviors> 
             <DataGrid.ContextMenu>
                 <ContextMenu>

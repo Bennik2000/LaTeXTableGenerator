@@ -2,9 +2,11 @@
 using Microsoft.Xaml.Behaviors;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace LaTeXTableGenerator.UI.Behaviors
 {
@@ -37,12 +39,23 @@ namespace LaTeXTableGenerator.UI.Behaviors
         {
             base.OnAttached();
             AssociatedObject.SelectedCellsChanged += OnSelectedCellsChanged;
+
+            var dpd = DependencyPropertyDescriptor.FromProperty(ItemsControl.ItemsSourceProperty, typeof(DataGrid));
+            dpd?.AddValueChanged(AssociatedObject, OnItemsSourceChanged);
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
             AssociatedObject.SelectedCellsChanged -= OnSelectedCellsChanged;
+
+            var dpd = DependencyPropertyDescriptor.FromProperty(ItemsControl.ItemsSourceProperty, typeof(DataGrid));
+            dpd?.RemoveValueChanged(AssociatedObject, OnItemsSourceChanged);
+        }
+
+        private void OnItemsSourceChanged(object sender, EventArgs e)
+        {
+            SelectedItems.Clear();
         }
 
         private static void PropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -100,7 +113,7 @@ namespace LaTeXTableGenerator.UI.Behaviors
             {
                 return cellDataContext?.Row[cell.Column.SortMemberPath];
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

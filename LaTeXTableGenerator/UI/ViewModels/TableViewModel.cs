@@ -1,14 +1,11 @@
-﻿using System;
+﻿using LaTeXTableGenerator.Model;
+using LaTeXTableGenerator.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Windows.Input;
-using LaTeXTableGenerator.Model;
-using LaTeXTableGenerator.Utils;
-using Microsoft.Xaml.Behaviors.Core;
 
 namespace LaTeXTableGenerator.UI.ViewModels
 {
@@ -49,16 +46,16 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         public ICommand AddRowCommand { get; set; }
         public ICommand DeleteRowCommand { get; set; }
-        public ICommand AddColumnCommand { get; set; }
+        public ICommand AddColumnLeftCommand { get; set; }
+        public ICommand AddColumnRightCommand { get; set; }
         public ICommand DeleteColumnCommand { get; set; }
-
-        public Table Table { get; set; }
 
         public TableViewModel()
         {
             SelectedCells = new ObservableCollection<object>();
             AddRowCommand = new RelayCommand(OnAddRowCommand);
-            AddColumnCommand = new RelayCommand(OnAddColumnCommand);
+            AddColumnLeftCommand = new RelayCommand(OnAddColumnLeftCommand);
+            AddColumnRightCommand = new RelayCommand(OnAddColumnRightCommand);
             DeleteRowCommand = new RelayCommand(OnDeleteRowCommand);
             DeleteColumnCommand = new RelayCommand(OnDeleteColumnCommand);
 
@@ -68,11 +65,6 @@ namespace LaTeXTableGenerator.UI.ViewModels
             InitializeTable(10, 5);
         }
 
-        public TableViewModel(Table table)
-        {
-            Table = table;
-        }
-
         private void OnDeleteColumnCommand(object obj)
         {
             var range = GetRangeOfSelection();
@@ -80,14 +72,58 @@ namespace LaTeXTableGenerator.UI.ViewModels
             var dataTable = TableItemsSource;
             TableItemsSource = null;
 
-            SelectedCells.Clear();
-
             for (int i = range.maxColumn; i >= range.minColumn; i--)
             {
                 DeleteColumn(i, dataTable);
             }
 
             TableItemsSource = dataTable;
+        }
+
+        private void OnDeleteRowCommand(object obj)
+        {
+            var range = GetRangeOfSelection();
+
+            var dataTable = TableItemsSource;
+            TableItemsSource = null;
+
+            for (int i = range.maxRow; i >= range.minRow; i--)
+            {
+                DeleteRow(i, dataTable);
+            }
+
+            TableItemsSource = dataTable;
+        }
+
+        private void OnAddColumnLeftCommand(object obj)
+        {
+            var range = GetRangeOfSelection();
+            AddColumn(range.minColumn);
+        }
+
+        private void OnAddColumnRightCommand(object obj)
+        {
+            var range = GetRangeOfSelection();
+            AddColumn(range.maxColumn + 1);
+        }
+
+        private void OnAddRowCommand(object obj)
+        {
+
+        }
+
+        private void AddColumn(int index)
+        {
+            foreach (var row in Rows)
+            {
+                row.Cells.Insert(index, new CellViewModel());
+            }
+
+            var newColumnCount = TableItemsSource.Columns.Count + 1;
+
+            var newTable = CreateDataTable(Rows, newColumnCount);
+
+            TableItemsSource = newTable;
         }
 
         private void DeleteColumn(int index, DataTable dataTable)
@@ -100,37 +136,10 @@ namespace LaTeXTableGenerator.UI.ViewModels
             dataTable.Columns.RemoveAt(index);
         }
 
-        private void OnDeleteRowCommand(object obj)
-        {
-            var range = GetRangeOfSelection();
-
-            var dataTable = TableItemsSource;
-            TableItemsSource = null;
-
-            SelectedCells.Clear();
-
-            for (int i = range.maxRow; i >= range.minRow; i--)
-            {
-                DeleteRow(i, dataTable);
-            }
-
-            TableItemsSource = dataTable;
-        }
-
         private void DeleteRow(int index, DataTable dataTable)
         {
             Rows.RemoveAt(index);
             dataTable.Rows.RemoveAt(index);
-        }
-
-        private void OnAddColumnCommand(object obj)
-        {
-            
-        }
-
-        private void OnAddRowCommand(object obj)
-        {
-
         }
 
         private (
@@ -176,11 +185,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
                 }
             }
 
-            return (
-                minRow: minRow, 
-                minColumn: minColumn, 
-                maxRow: maxRow, 
-                maxColumn: maxColumn);
+            return (minRow, minColumn, maxRow, maxColumn);
         }
 
         public void InitializeTable(int rows, int columns)
@@ -193,26 +198,34 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
                 for (int j = 0; j < columns; j++)
                 {
-                    cells.Add(new CellViewModel());
+                    cells.Add(new CellViewModel()
+                    {
+                        Text = $"Lorem Row: {i} Col: {j}"
+                    });
                 }
 
                 Rows.Add(new RowViewModel(cells));
             }
 
-            TableItemsSource.Clear();
+            TableItemsSource = CreateDataTable(Rows, columns);
+        }
+
+        public DataTable CreateDataTable(List<RowViewModel> rows, int columns)
+        {
+            var dataTable = new DataTable();
 
             for (int i = 0; i < columns; i++)
             {
-                TableItemsSource.Columns.Add($"Column{i}", typeof(CellViewModel));
+                dataTable.Columns.Add($"Column{i}", typeof(CellViewModel));
             }
 
-            for (int i = 0; i < rows; i++)
+            foreach (var row in rows)
             {
-                var parameters = Rows[i].Cells.ToArray<object>();
-
-                TableItemsSource.Rows.Add(parameters);
+                var parameters = row.Cells.ToArray<object>();
+                dataTable.Rows.Add(parameters);
             }
 
+            return dataTable;
         }
 
         public Table ToTable()
