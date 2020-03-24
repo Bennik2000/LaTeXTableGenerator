@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Data\ITableReader.cs" />
     <Compile Include="Data\MarkdownTableReader.cs" />
+    <Compile Include="Data\TableLoader.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UI\Behaviors\MultiSelectBehavior.cs" />
     <Compile Include="UI\Converter\DataRowViewConverter.cs" />
@@ -129,6 +130,13 @@
   <ItemGroup>
     <Resource Include="Resources\AddColumnsToLeft.png" />
     <Resource Include="Resources\AddColumnsToRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AddToRowAbove.png" />
+    <Resource Include="Resources\AddToRowBelow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Document.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

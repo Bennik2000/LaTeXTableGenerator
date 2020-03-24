@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 
 namespace LaTeXTableGenerator.UI.ViewModels
@@ -44,16 +45,30 @@ namespace LaTeXTableGenerator.UI.ViewModels
             set => SelectedCellsViewModels.ForEach(c => c.IsBold = value);
         }
 
-        public ICommand AddRowCommand { get; set; }
-        public ICommand DeleteRowCommand { get; set; }
-        public ICommand AddColumnLeftCommand { get; set; }
-        public ICommand AddColumnRightCommand { get; set; }
-        public ICommand DeleteColumnCommand { get; set; }
+        public ICommand AddRowAboveCommand { get; private set; }
+        public ICommand AddRowBelowCommand { get; private set; }
+        public ICommand DeleteRowCommand { get; private set; }
+        public ICommand AddColumnLeftCommand { get; private set; }
+        public ICommand AddColumnRightCommand { get; private set; }
+        public ICommand DeleteColumnCommand { get; private set; }
 
         public TableViewModel()
         {
+            InitializeViewModel();
+            InitializeTable(10, 5);
+        }
+
+        public TableViewModel(Table table)
+        {
+            InitializeViewModel();
+            FromTable(table);
+        }
+
+        void InitializeViewModel()
+        {
             SelectedCells = new ObservableCollection<object>();
-            AddRowCommand = new RelayCommand(OnAddRowCommand);
+            AddRowAboveCommand = new RelayCommand(OnAddRowAboveCommand);
+            AddRowBelowCommand = new RelayCommand(OnAddRowBelowCommand);
             AddColumnLeftCommand = new RelayCommand(OnAddColumnLeftCommand);
             AddColumnRightCommand = new RelayCommand(OnAddColumnRightCommand);
             DeleteRowCommand = new RelayCommand(OnDeleteRowCommand);
@@ -61,8 +76,6 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
             TableItemsSource = new DataTable();
             Rows = new List<RowViewModel>();
-
-            InitializeTable(10, 5);
         }
 
         private void OnDeleteColumnCommand(object obj)
@@ -107,9 +120,16 @@ namespace LaTeXTableGenerator.UI.ViewModels
             AddColumn(range.maxColumn + 1);
         }
 
-        private void OnAddRowCommand(object obj)
+        private void OnAddRowAboveCommand(object obj)
         {
+            var range = GetRangeOfSelection();
+            AddRow(range.minRow);
+        }
 
+        private void OnAddRowBelowCommand(object obj)
+        {
+            var range = GetRangeOfSelection();
+            AddRow(range.maxRow + 1);
         }
 
         private void AddColumn(int index)
@@ -124,6 +144,29 @@ namespace LaTeXTableGenerator.UI.ViewModels
             var newTable = CreateDataTable(Rows, newColumnCount);
 
             TableItemsSource = newTable;
+        }
+
+        private void AddRow(int index)
+        {
+            var cells = new List<CellViewModel>();
+
+            for (int i = 0; i < TableItemsSource.Columns.Count; i++)
+            {
+                cells.Add(new CellViewModel());
+            }
+
+            Rows.Insert(index, new RowViewModel(cells));
+
+            var table = TableItemsSource;
+            TableItemsSource = null;
+
+            var row = table.NewRow();
+
+            row.ItemArray = cells.ToArray<object>();
+
+            table.Rows.InsertAt(row, index);
+
+            TableItemsSource = table;
         }
 
         private void DeleteColumn(int index, DataTable dataTable)
@@ -143,9 +186,9 @@ namespace LaTeXTableGenerator.UI.ViewModels
         }
 
         private (
-            int minRow, 
-            int minColumn, 
-            int maxRow, 
+            int minRow,
+            int minColumn,
+            int maxRow,
             int maxColumn) GetRangeOfSelection()
         {
             var selection = SelectedCellsViewModels.ToList();
@@ -210,7 +253,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
             TableItemsSource = CreateDataTable(Rows, columns);
         }
 
-        public DataTable CreateDataTable(List<RowViewModel> rows, int columns)
+        public DataTable CreateDataTable(IEnumerable<RowViewModel> rows, int columns)
         {
             var dataTable = new DataTable();
 
@@ -226,6 +269,19 @@ namespace LaTeXTableGenerator.UI.ViewModels
             }
 
             return dataTable;
+        }
+
+        public void FromTable(Table table)
+        {
+            SelectedCells.Clear();
+            Rows.Clear();
+            TableItemsSource.Clear();
+
+            Rows = table.Rows.Select(t =>
+                new RowViewModel(t.Cells.Select(c =>
+                    new CellViewModel(c)))).ToList();
+
+            TableItemsSource = CreateDataTable(Rows, table.ColumnCount);
         }
 
         public Table ToTable()

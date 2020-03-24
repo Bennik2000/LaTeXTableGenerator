@@ -28,10 +28,17 @@ namespace LaTeXTableGenerator.LaTeX
                         cellLaTeX = $"\\textit{{{cellLaTeX}}}";
                     }
 
+                    builder.Append("    ");
+
                     if (!isFirst)
                     {
-                        builder.Append("    & ");
+                        builder.Append("& ");
                     }
+                    else
+                    {
+                        builder.Append("  ");
+                    }
+
 
                     builder
                         .Append(cellLaTeX)

@@ -44,7 +44,8 @@
             </TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="EditCellDataTemplate">
-            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                     Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="5, 10"
                      Height="20"
                      VerticalAlignment="Center"
@@ -75,7 +76,6 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -84,18 +84,34 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0">
-            <Button Content="Load Table" 
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Left"/>
-        </Grid>
-
-        <Menu Grid.Row="1" Grid.Column="0">
-            <MenuItem ToolTip="Add Row"
-                      Command="{Binding TableViewModel.AddRowCommand}">
+        <Menu Grid.Row="0" Grid.Column="0">
+            <MenuItem ToolTip="Load table"
+                      Command="{Binding LoadTableCommand}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Document.png"></Image>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem ToolTip="Add Row">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddRow.png" />
                 </MenuItem.Icon>
+                <MenuItem.Items>
+                    <MenuItem ToolTip="Add a row above"
+                              Header="Above"
+                              Command="{Binding TableViewModel.AddRowAboveCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem ToolTip="Add a row below"
+                              Header="Below"
+                              Command="{Binding TableViewModel.AddRowBelowCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem.Items>
             </MenuItem>
             <MenuItem ToolTip="Add Column">
                 <MenuItem.Icon>
@@ -130,9 +146,11 @@
                     <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png" />
                 </MenuItem.Icon>
             </MenuItem>
+            <MenuItem Header="Generate LaTeX"
+                      Command="{Binding GenerateLaTeXCommand}"/>
         </Menu>
 
-        <DataGrid Grid.Row="2" Grid.Column="0"
+        <DataGrid Grid.Row="1" Grid.Column="0"
                   ItemsSource="{Binding TableViewModel.TableItemsSource}"
                   Style="{StaticResource DataGridStyle}"
                   AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"

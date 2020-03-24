@@ -42,9 +42,21 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         public CellViewModel()
         {
-            Text = "Lorem ipsum";
-            IsBold = true;
-            IsItalic = true;
+            Text = string.Empty;
+            IsBold = false;
+            IsItalic = false;
+        }
+
+        public CellViewModel(Cell cell)
+        {
+            FromCell(cell);
+        }
+
+        public void FromCell(Cell cell)
+        {
+            Text = cell.Text;
+            IsBold = cell.IsBold;
+            IsItalic = cell.IsItalic;
         }
 
         public Cell ToCell()

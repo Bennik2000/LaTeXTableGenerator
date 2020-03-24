@@ -8,6 +8,9 @@ namespace LaTeXTableGenerator.UI.ViewModels
     {
         public List<CellViewModel> Cells { get; set; }
 
+        public RowViewModel(IEnumerable<CellViewModel> cells) 
+            : this(cells.ToList()) { }
+
         public RowViewModel(List<CellViewModel> cells)
         {
             Cells = cells;
