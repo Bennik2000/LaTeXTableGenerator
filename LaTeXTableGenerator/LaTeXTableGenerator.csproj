@@ -72,6 +72,7 @@
     <Compile Include="Data\TableLoader.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UI\Behaviors\MultiSelectBehavior.cs" />
+    <Compile Include="UI\Commands\CopyToClipboardCommand.cs" />
     <Compile Include="UI\Converter\DataRowViewConverter.cs" />
     <Compile Include="UI\ViewModels\CellViewModel.cs" />
     <Compile Include="UI\ViewModels\MainWindowViewModel.cs" />
@@ -150,5 +151,6 @@
   <ItemGroup>
     <Resource Include="Resources\Flask.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
