@@ -26,6 +26,42 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         private List<RowViewModel> Rows { get; set; }
 
+        public string TableCaption
+        {
+            get => _tableCaption;
+            set
+            {
+                if (value == _tableCaption) return;
+                _tableCaption = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _tableCaption;
+
+        public bool VerticalTableLines
+        {
+            get => _verticalTableLines;
+            set
+            {
+                if (value == _verticalTableLines) return;
+                _verticalTableLines = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _verticalTableLines;
+
+        public bool HorizontalTableLines
+        {
+            get => _horizontalTableLines;
+            set
+            {
+                if (value == _horizontalTableLines) return;
+                _horizontalTableLines = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _horizontalTableLines;
+
         public ObservableCollection<object> SelectedCells { get; set; }
 
         private IEnumerable<CellViewModel> SelectedCellsViewModels =>
@@ -55,7 +91,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
         public TableViewModel()
         {
             InitializeViewModel();
-            InitializeTable(10, 5);
+            InitializeTable(6, 4);
         }
 
         public TableViewModel(Table table)
@@ -123,13 +159,15 @@ namespace LaTeXTableGenerator.UI.ViewModels
         private void OnAddRowAboveCommand(object obj)
         {
             var range = GetRangeOfSelection();
-            AddRow(range.minRow);
+
+            AddRow(range.hasSelection ? range.minRow : 0);
         }
 
         private void OnAddRowBelowCommand(object obj)
         {
             var range = GetRangeOfSelection();
-            AddRow(range.maxRow + 1);
+
+            AddRow(range.hasSelection ? range.minRow : 0);
         }
 
         private void AddColumn(int index)
@@ -189,9 +227,13 @@ namespace LaTeXTableGenerator.UI.ViewModels
             int minRow,
             int minColumn,
             int maxRow,
-            int maxColumn) GetRangeOfSelection()
+            int maxColumn,
+            bool hasSelection) GetRangeOfSelection()
         {
             var selection = SelectedCellsViewModels.ToList();
+
+            if (!selection.Any())
+                return (0, 0, 0, 0, false);
 
             var minRow = int.MaxValue;
             var maxRow = 0;
@@ -228,7 +270,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
                 }
             }
 
-            return (minRow, minColumn, maxRow, maxColumn);
+            return (minRow, minColumn, maxRow, maxColumn, true);
         }
 
         public void InitializeTable(int rows, int columns)
@@ -241,10 +283,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
                 for (int j = 0; j < columns; j++)
                 {
-                    cells.Add(new CellViewModel()
-                    {
-                        Text = $"Lorem Row: {i} Col: {j}"
-                    });
+                    cells.Add(new CellViewModel());
                 }
 
                 Rows.Add(new RowViewModel(cells));
@@ -273,6 +312,10 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         public void FromTable(Table table)
         {
+            TableCaption = table.TableCaption;
+            VerticalTableLines = table.VerticalTableLines;
+            HorizontalTableLines = table.HorizontalTableLines;
+
             SelectedCells.Clear();
             Rows.Clear();
             TableItemsSource.Clear();
@@ -288,7 +331,12 @@ namespace LaTeXTableGenerator.UI.ViewModels
         {
             var rows = Rows.Select(r => r.ToRow()).ToList();
 
-            var table = new Table(rows);
+            var table = new Table(rows)
+            {
+                TableCaption = TableCaption,
+                VerticalTableLines = VerticalTableLines,
+                HorizontalTableLines = HorizontalTableLines
+            };
 
             return table;
         }

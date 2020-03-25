@@ -18,37 +18,20 @@ namespace LaTeXTableGenerator.LaTeX
                 {
                     var cellLaTeX = cell.Text;
 
-                    if (cell.IsBold)
-                    {
-                        cellLaTeX = $"\\textbf{{{cellLaTeX}}}";
-                    }
-
-                    if (cell.IsItalic)
-                    {
-                        cellLaTeX = $"\\textit{{{cellLaTeX}}}";
-                    }
+                    if (cell.IsBold) cellLaTeX = $"\\textbf{{{cellLaTeX}}}";
+                    if (cell.IsItalic) cellLaTeX = $"\\textit{{{cellLaTeX}}}";
 
                     builder.Append("    ");
-
-                    if (!isFirst)
-                    {
-                        builder.Append("& ");
-                    }
-                    else
-                    {
-                        builder.Append("  ");
-                    }
-
-
-                    builder
-                        .Append(cellLaTeX)
-                        .Append("\n");
+                    builder.Append(!isFirst ? "& " : "  ");
+                    builder.AppendLine(cellLaTeX);
 
                     isFirst = false;
                 }
 
-                builder.Append("    \\tabularnewline\n" +
-                               "\\hline %------------------------------------------------------------------------------------------------------\n");
+                builder.AppendLine(@"\tabularnewline");
+
+                if (table.HorizontalTableLines) 
+                    builder.AppendLine(@"\hline");
             }
 
             AppendTableFooter(builder, table);
@@ -56,29 +39,39 @@ namespace LaTeXTableGenerator.LaTeX
             return builder.ToString();
         }
 
-        private void AppendTableHead(StringBuilder stringBuilder, Table table)
+        private void AppendTableHead(StringBuilder builder, Table table)
         {
-            stringBuilder.Append(
-                "\\begin{longtable}[l]{\n" +
-                "    | >{\\raggedright}p{0.05\\textwidth}\n" +
-                "    | >{\\raggedright}p{0.225\\textwidth}\n" +
-                "    | >{\\raggedright}p{0.4\\textwidth}\n" +
-                "    | >{\\raggedright}p{0.2\\textwidth}\n" +
-                "    |}\n");
+            builder.AppendLine(@"\begin{longtable}[l]{");
 
-            stringBuilder.Append(
-                "\\hline %------------------------------------------------------------------------------------------------------" +
-                "\n");
 
+            for (int i = 0; i < table.RowCount; i++)
+            {
+                builder.Append("  ");
+                if (table.VerticalTableLines)
+                    builder.Append("|");
+
+                builder.AppendLine("l");
+
+            }
+
+            if (table.VerticalTableLines)
+                builder.Append("|");
+
+            builder.AppendLine("}");
+
+            if (table.HorizontalTableLines)
+                builder.AppendLine(@"\hline");
         }
 
         private void AppendTableFooter(StringBuilder stringBuilder, Table table)
         {
-            var label = table.TableCaption.ToLower().Replace(' ', '-');
+            var label = table.TableCaption?.ToLower()?.Replace(' ', '-') ?? string.Empty;
 
-            stringBuilder.AppendFormat("\\caption{{{0}}}\n" +
-                                 "\\label{{tab:{1}}}\n" +
-                                 "\\end{{longtable}}", table.TableCaption, label);
+            stringBuilder.AppendFormat(@"\caption{{{0}}}\n" +
+                                       @"\label{{tab:{1}}}\n" +
+                                       @"\end{{longtable}}", 
+                table.TableCaption, 
+                label);
         }
     }
 }

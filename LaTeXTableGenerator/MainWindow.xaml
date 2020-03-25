@@ -88,7 +88,7 @@
         </Grid.ColumnDefinitions>
 
         <fluent:Ribbon Grid.Row="0" Grid.ColumnSpan="2">
-            <fluent:RibbonTabItem Header="Common">
+            <fluent:RibbonTabItem Header="Table">
                 <fluent:RibbonGroupBox Header="File">
                     <fluent:Button Header="Load file"
                                    Width="60"
@@ -126,14 +126,14 @@
                         <fluent:Button ToolTip="Add a column on the left"
                                        Header="On the left"
                                        Size="Middle"
-                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png"
-                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png"
+                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToLeft.png"
+                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToLeft.png"
                                        Command="{Binding TableViewModel.AddColumnLeftCommand}" />
                         <fluent:Button ToolTip="Add a column on the right"
                                        Header="On the right"
                                        Size="Middle"
-                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png"
-                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png"
+                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToRight.png"
+                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToRight.png"
                                        Command="{Binding TableViewModel.AddColumnRightCommand}" />
 
                     </fluent:DropDownButton>
@@ -211,6 +211,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -225,8 +227,11 @@
 
                     <TextBox Grid.Row="0"
                              Grid.Column="1"
+                             Height="22"
+                             Text="{Binding TableViewModel.TableCaption}"
+                             VerticalAlignment="Center"
+                             VerticalContentAlignment="Center"
                              Margin="10,0,0,10" />
-
 
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
@@ -236,11 +241,23 @@
 
                     <ComboBox Grid.Row="1"
                               Grid.Column="1"
+                              Height="22"
                               Margin="10,0,0,10">
                         <ComboBoxItem>longtable</ComboBoxItem>
                         <ComboBoxItem>tablex</ComboBoxItem>
                         <ComboBoxItem>tabley</ComboBoxItem>
                     </ComboBox>
+
+                    <CheckBox Grid.Row="2"
+                              Grid.Column="1"
+                              Content="Vertical table lines"
+                              IsChecked="{Binding TableViewModel.VerticalTableLines}"
+                              Margin="10,0,0,10"/>
+                    <CheckBox Grid.Row="3"
+                              Grid.Column="1"
+                              Content="Horizontal table lines"
+                              IsChecked="{Binding TableViewModel.HorizontalTableLines}"
+                              Margin="10,0,0,0"/>
                 </Grid>
             </GroupBox>
 

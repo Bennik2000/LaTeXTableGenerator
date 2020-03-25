@@ -12,6 +12,10 @@ namespace LaTeXTableGenerator.Model
 
         public string TableCaption { get; set; }
 
+        public bool VerticalTableLines { get; set; }
+
+        public bool HorizontalTableLines { get; set; }
+
         public Table(List<Row> rows)
         {
             TableCaption = string.Empty;

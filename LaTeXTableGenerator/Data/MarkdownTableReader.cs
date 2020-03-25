@@ -60,7 +60,12 @@ namespace LaTeXTableGenerator.Data
                 }
             }
 
-            var table = new Table(rows);
+            var tableCaption = System.IO.Path.GetFileNameWithoutExtension(Path);
+
+            var table = new Table(rows)
+            {
+                TableCaption = tableCaption
+            };
 
             return Task.FromResult(table);
         }
