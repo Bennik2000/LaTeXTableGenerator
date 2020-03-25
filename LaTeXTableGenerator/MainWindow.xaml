@@ -7,6 +7,7 @@
         xmlns:converter="clr-namespace:LaTeXTableGenerator.UI.Converter"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviors="clr-namespace:LaTeXTableGenerator.UI.Behaviors"
+        xmlns:fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
@@ -84,68 +85,83 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.Row="0" Grid.Column="0">
-            <MenuItem ToolTip="Load table"
-                      Command="{Binding LoadTableCommand}">
-                <MenuItem.Icon>
-                    <Image Source="Resources/Document.png"></Image>
-                </MenuItem.Icon>
-            </MenuItem>
-            <Separator />
-            <MenuItem ToolTip="Add Row">
-                <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddRow.png" />
-                </MenuItem.Icon>
-                <MenuItem.Items>
-                    <MenuItem ToolTip="Add a row above"
-                              Header="Above"
-                              Command="{Binding TableViewModel.AddRowAboveCommand}">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem ToolTip="Add a row below"
-                              Header="Below"
-                              Command="{Binding TableViewModel.AddRowBelowCommand}">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem.Items>
-            </MenuItem>
-            <MenuItem ToolTip="Add Column">
-                <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumn.png"/>
-                </MenuItem.Icon>
-                <MenuItem.Items>
-                    <MenuItem ToolTip="Add a column to the left"
-                              Header="To the left"
-                              Command="{Binding TableViewModel.AddColumnLeftCommand}">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToLeft.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem ToolTip="Add a column to the right"
-                              Header="To the rights"
-                              Command="{Binding TableViewModel.AddColumnRightCommand}">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumnsToRight.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem.Items>
-            </MenuItem>
-            <MenuItem ToolTip="Delete Row"
-                      Command="{Binding TableViewModel.DeleteRowCommand}">
-                <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteTableRow.png" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem ToolTip="Delete Column"
-                      Command="{Binding TableViewModel.DeleteColumnCommand}">
-                <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png" />
-                </MenuItem.Icon>
-            </MenuItem>
+        <fluent:Ribbon Grid.Row="0" Grid.ColumnSpan="2">
+            <fluent:RibbonTabItem Header="Common">
+                <fluent:RibbonGroupBox Header="File">
+                    <fluent:Button Header="Load file"
+                                   Width="60"
+                                   Command="{Binding LoadTableCommand}"
+                                   Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/Document.png"
+                                   LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/Document.png"/>
+
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Table">
+                    <fluent:DropDownButton Header="Add row"
+                                           Width="60"
+                                           Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddRow.png"
+                                           LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddRow.png">
+                        <fluent:Button ToolTip="Add a row above"
+                                       Header="Above"
+                                       Size="Middle"
+                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png"
+                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png"
+                                       Command="{Binding TableViewModel.AddRowAboveCommand}" />
+                        <fluent:Button ToolTip="Add a row below"
+                                       Header="Below"
+                                       Size="Middle"
+                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png"
+                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png"
+                                       Command="{Binding TableViewModel.AddRowBelowCommand}" />
+
+
+                    </fluent:DropDownButton>
+                    <fluent:DropDownButton Header="Add column"
+                                           Width="60"
+                                           Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumn.png"
+                                           LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddColumn.png">
+
+                        <fluent:Button ToolTip="Add a column on the left"
+                                       Header="On the left"
+                                       Size="Middle"
+                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png"
+                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowAbove.png"
+                                       Command="{Binding TableViewModel.AddColumnLeftCommand}" />
+                        <fluent:Button ToolTip="Add a column on the right"
+                                       Header="On the right"
+                                       Size="Middle"
+                                       Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png"
+                                       LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/AddToRowBelow.png"
+                                       Command="{Binding TableViewModel.AddColumnRightCommand}" />
+
+                    </fluent:DropDownButton>
+                    <fluent:Button Header="Delete row"
+                                   Width="60"
+                                   ToolTip="Delete selected rows"
+                                   Command="{Binding TableViewModel.DeleteRowCommand}"
+                                   Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteTableRow.png"
+                                   LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteTableRow.png" />
+                    <fluent:Button Header="Delete column"
+                                   Width="60"
+                                   ToolTip="Delete selected columns"
+                                   Command="{Binding TableViewModel.DeleteColumnCommand}"
+                                   Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png"
+                                   LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png" />
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="LaTeX">
+
+                    <fluent:Button Header="Generate LaTeX"
+                                   Width="60"
+                                   Command="{Binding GenerateLaTeXCommand}"
+                                   Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/Flask.png"
+                                   LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/Flask.png" />
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+        </fluent:Ribbon>
+
+        <Menu Grid.Row="1"
+              Grid.Column="0">
             <MenuItem Header="Generate LaTeX"
                       Command="{Binding GenerateLaTeXCommand}"/>
         </Menu>
@@ -185,11 +201,24 @@
             </DataGrid.ContextMenu>
         </DataGrid>
 
-        <TextBox IsReadOnly="True" 
-                 Grid.Column="1" 
-                 Grid.Row="2"
-                 Text="{Binding OutputViewModel.Code}" 
-                 FontFamily="Consolas" 
-                 Margin="10"/>
+
+        <Grid Grid.Row="1"
+              Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="LaTeX specific parameters" VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+
+            <TextBox IsReadOnly="True"
+                     Grid.Column="0"
+                     Grid.Row="1"
+                     Text="{Binding OutputViewModel.Code}"
+                     FontFamily="Consolas"
+                     Margin="10" />
+
+        </Grid>
     </Grid>
 </Window>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg831"
+   sodipodi:docname="flask-sharp.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="D:\Software\LaTeXTableGenerator\LaTeXTableGenerator\Resources\Flask.png"
+   inkscape:export-xdpi="95.999992"
+   inkscape:export-ydpi="95.999992">
+  <metadata
+     id="metadata837">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>ionicons-v5-n</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs835" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview833"
+     showgrid="true"
+     inkscape:zoom="16"
+     inkscape:cx="22.150887"
+     inkscape:cy="19.448282"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg831">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4542" />
+  </sodipodi:namedview>
+  <title
+     id="title827">ionicons-v5-n</title>
+  <path
+     sodipodi:type="inkscape:offset"
+     inkscape:radius="2"
+     inkscape:original="M 9 2 L 9 5 L 11 5 L 11 9.6191406 L 2.6796875 23.921875 C 1.8671544 25.211869 1.7559075 26.656561 2.4921875 27.992188 C 3.2284675 29.327815 4.4743129 30 6 30 L 26 30 C 27.525688 30 28.76958 29.328443 29.505859 27.992188 C 30.24214 26.655942 30.134721 25.211869 29.320312 23.921875 L 21 9.6191406 L 21 5 L 23 5 L 23 2 L 9 2 z M 14 5 L 18 5 L 18 9.9121094 C 17.999918 10.217883 17.975272 10.516933 18.138672 10.775391 L 22.300781 18 L 9.6992188 18 L 13.824219 10.835938 C 14.013681 10.536879 14.000877 10.189955 14 9.8359375 L 14 5 z "
+     xlink:href="#path829"
+     style="fill:#efeff0;fill-opacity:1;stroke:none;stroke-width:0.06250127;stroke-opacity:1"
+     id="path4599"
+     inkscape:href="#path829"
+     d="M 9,0 A 2.0002,2.0002 0 0 0 7,2 v 3 a 2.0002,2.0002 0 0 0 2,2 v 2.0800781 l -8.04882812,13.8359379 0.0371094,-0.06055 c -1.12754631,1.790115 -1.3198085,4.157365 -0.24804687,6.101562 C 1.8000372,30.879535 3.8868748,32 6,32 h 20 c 2.112577,0 4.198738,-1.12088 5.257812,-3.042969 1.069885,-1.941689 0.88562,-4.310923 -0.246093,-6.103515 L 23,9.0800781 V 7 A 2.0002,2.0002 0 0 0 25,5 V 2 A 2.0002,2.0002 0 0 0 23,0 Z m 7,9.8359375 v 0.076172 c -5.3e-5,0.1986536 -0.13704,1.0074146 0.447266,1.9316406 L 18.841797,16 h -5.683594 l 2.355469,-4.09375 C 16.097032,10.985437 16.001457,10.14769 16,9.8359375 Z" />
+  <path
+     d="M 29.319782,23.922503 21,9.6199975 V 5 h 2 V 2 H 9 v 3 h 2 V 9.6199975 L 2.6799453,23.922503 C 1.8674122,25.212497 1.7561577,26.65562 2.4924377,27.991246 3.2287177,29.326874 4.4737685,30 5.9994556,30 H 26.000271 c 1.525688,0 2.770114,-0.672498 3.506393,-2.008754 0.736281,-1.336245 0.627526,-2.778749 -0.186882,-4.068743 z M 13.824,10.836871 C 14.013462,10.537812 14.000877,10.190896 14,9.836879 V 5 h 4 v 4.911876 c -8.2e-5,0.305774 -0.0254,0.605293 0.138,0.863751 L 22.301371,18 H 9.6983571 Z"
+     id="path829"
+     style="fill:#424242;fill-opacity:1;stroke:none;stroke-width:0.06250127;stroke-opacity:1"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccccccsssccccccccccc" />
+</svg>

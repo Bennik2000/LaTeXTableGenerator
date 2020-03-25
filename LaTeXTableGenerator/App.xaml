@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:LaTeXTableGenerator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         <ResourceDictionary Source="UI/Style/DataGridStyle.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="UI/Style/DataGridStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
