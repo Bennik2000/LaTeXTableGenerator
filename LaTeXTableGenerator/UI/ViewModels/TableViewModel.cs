@@ -298,7 +298,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
             for (int i = 0; i < columns; i++)
             {
-                dataTable.Columns.Add($"Column{i}", typeof(CellViewModel));
+                dataTable.Columns.Add($"Column {i + 1}", typeof(CellViewModel));
             }
 
             foreach (var row in rows)

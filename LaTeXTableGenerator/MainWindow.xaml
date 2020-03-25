@@ -153,15 +153,10 @@
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
 
-        <Menu Grid.Row="1"
-              Grid.Column="0">
-            <MenuItem Header="Generate LaTeX"
-                      Command="{Binding GenerateLaTeXCommand}"/>
-        </Menu>
-
         <DataGrid Grid.Row="1" Grid.Column="0"
                   ItemsSource="{Binding TableViewModel.TableItemsSource}"
                   Style="{StaticResource DataGridStyle}"
+                  Margin="0,10,0,0"
                   AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
                   AutoGenerateColumns="True"
                   CanUserAddRows="False"

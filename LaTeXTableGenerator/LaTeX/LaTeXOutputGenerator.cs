@@ -1,4 +1,6 @@
-﻿using LaTeXTableGenerator.Model;
+﻿using System.Collections.Generic;
+using System.Data;
+using LaTeXTableGenerator.Model;
 using System.Text;
 
 namespace LaTeXTableGenerator.LaTeX
@@ -16,7 +18,7 @@ namespace LaTeXTableGenerator.LaTeX
                 bool isFirst = true;
                 foreach (var cell in row.Cells)
                 {
-                    var cellLaTeX = cell.Text;
+                    var cellLaTeX = EscapeSpecialCharacters(cell.Text);
 
                     if (cell.IsBold) cellLaTeX = $"\\textbf{{{cellLaTeX}}}";
                     if (cell.IsItalic) cellLaTeX = $"\\textit{{{cellLaTeX}}}";
@@ -65,13 +67,43 @@ namespace LaTeXTableGenerator.LaTeX
 
         private void AppendTableFooter(StringBuilder stringBuilder, Table table)
         {
+            var caption = EscapeSpecialCharacters(table.TableCaption);
+            
             var label = table.TableCaption?.ToLower()?.Replace(' ', '-') ?? string.Empty;
 
-            stringBuilder.AppendFormat(@"\caption{{{0}}}\n" +
-                                       @"\label{{tab:{1}}}\n" +
-                                       @"\end{{longtable}}", 
-                table.TableCaption, 
+            stringBuilder.AppendFormat("\\caption{{{0}}}\n" +
+                                       "\\label{{tab:{1}}}\n" +
+                                       "\\end{{longtable}}", 
+                caption, 
                 label);
+        }
+
+        private string EscapeSpecialCharacters(string text)
+        {
+            if (text == null) return string.Empty;
+
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"\\", "\\textbackslash " },
+                {"%", "\\% " },
+                {"$", "\\$ " },
+                {"{", "\\{ " },
+                {"}", "\\} " },
+                {"_", "\\_ " },
+                {"<", "\\textless " },
+                {">", "\\textgreater " },
+                {"|", "\\textbar " },
+                {"#", "\\# " },
+                {"&", "\\& " },
+                {"§", "\\S " },
+            };
+
+            foreach (var escapePair in dictionary)
+            {
+                text = text.Replace(escapePair.Key, escapePair.Value);
+            }
+
+            return text;
         }
     }
 }
