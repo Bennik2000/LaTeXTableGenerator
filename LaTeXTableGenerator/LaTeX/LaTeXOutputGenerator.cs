@@ -46,7 +46,7 @@ namespace LaTeXTableGenerator.LaTeX
             builder.AppendLine(@"\begin{longtable}[l]{");
 
 
-            for (int i = 0; i < table.RowCount; i++)
+            for (int i = 0; i < table.ColumnCount; i++)
             {
                 builder.Append("  ");
                 if (table.VerticalTableLines)
