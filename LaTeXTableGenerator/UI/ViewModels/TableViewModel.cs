@@ -167,7 +167,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
         {
             var range = GetRangeOfSelection();
 
-            AddRow(range.hasSelection ? range.minRow : 0);
+            AddRow(range.hasSelection ? range.maxRow + 1 : 0);
         }
 
         private void AddColumn(int index)
