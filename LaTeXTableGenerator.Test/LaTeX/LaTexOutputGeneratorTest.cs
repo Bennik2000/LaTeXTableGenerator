@@ -1,9 +1,9 @@
-﻿using LaTeXTableGenerator.LaTeX;
+﻿using System.Diagnostics;
+using LaTeXTableGenerator.LaTeX;
 using LaTeXTableGenerator.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 
-namespace LaTeXTableGenerator.Test
+namespace LaTeXTableGenerator.Test.LaTeX
 {
     [TestClass]
     public class LaTeXOutputGeneratorTest

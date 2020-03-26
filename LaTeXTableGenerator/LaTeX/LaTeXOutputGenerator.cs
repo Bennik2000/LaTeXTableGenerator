@@ -13,12 +13,14 @@ namespace LaTeXTableGenerator.LaTeX
 
             AppendTableHead(builder, table);
 
+            var latexEscape = new LaTeXTextEscape();
+
             foreach (var row in table.Rows)
             {
                 bool isFirst = true;
                 foreach (var cell in row.Cells)
                 {
-                    var cellLaTeX = EscapeSpecialCharacters(cell.Text);
+                    var cellLaTeX = latexEscape.Escape(cell.Text);
 
                     if (cell.IsBold) cellLaTeX = $"\\textbf{{{cellLaTeX}}}";
                     if (cell.IsItalic) cellLaTeX = $"\\textit{{{cellLaTeX}}}";
@@ -67,7 +69,7 @@ namespace LaTeXTableGenerator.LaTeX
 
         private void AppendTableFooter(StringBuilder stringBuilder, Table table)
         {
-            var caption = EscapeSpecialCharacters(table.TableCaption);
+            var caption = new LaTeXTextEscape().Escape(table.TableCaption);
             
             var label = table.TableCaption?.ToLower()?.Replace(' ', '-') ?? string.Empty;
 
@@ -76,34 +78,6 @@ namespace LaTeXTableGenerator.LaTeX
                                        "\\end{{longtable}}", 
                 caption, 
                 label);
-        }
-
-        private string EscapeSpecialCharacters(string text)
-        {
-            if (text == null) return string.Empty;
-
-            var dictionary = new Dictionary<string, string>()
-            {
-                {"\\", "\\textbackslash " },
-                {"%", "\\% " },
-                {"$", "\\$ " },
-                {"{", "\\{ " },
-                {"}", "\\} " },
-                {"_", "\\_ " },
-                {"<", "\\textless " },
-                {">", "\\textgreater " },
-                {"|", "\\textbar " },
-                {"#", "\\# " },
-                {"&", "\\& " },
-                {"§", "\\S " },
-            };
-
-            foreach (var escapePair in dictionary)
-            {
-                text = text.Replace(escapePair.Key, escapePair.Value);
-            }
-
-            return text;
         }
     }
 }

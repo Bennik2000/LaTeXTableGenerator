@@ -70,6 +70,7 @@
     <Compile Include="Data\ITableReader.cs" />
     <Compile Include="Data\MarkdownTableReader.cs" />
     <Compile Include="Data\TableLoader.cs" />
+    <Compile Include="LaTeX\LaTeXTextEscape.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UI\Behaviors\MultiSelectBehavior.cs" />
     <Compile Include="UI\Commands\CopyToClipboardCommand.cs" />
