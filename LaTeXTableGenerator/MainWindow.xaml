@@ -10,7 +10,7 @@
         xmlns:fluent="urn:fluent-ribbon"
         xmlns:commands="clr-namespace:LaTeXTableGenerator.UI.Commands"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="LaTeX Table generator"
         WindowState="Maximized"
         Height="650"
         Width="1000">
@@ -169,6 +169,8 @@
                   CanUserReorderColumns="False"
                   CanUserResizeRows="False"
                   SelectionMode="Extended"
+                  EnableRowVirtualization="False"
+                  EnableColumnVirtualization="False"
                   SelectionUnit="Cell">
             <b:Interaction.Behaviors>
                 <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=TwoWay}"/>

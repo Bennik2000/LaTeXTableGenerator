@@ -25,7 +25,10 @@ namespace LaTeXTableGenerator.Data
 
                 var rows = ReadRows(worksheet);
 
-                var table = new Table(rows);
+                var table = new Table(rows)
+                {
+                    TableCaption = System.IO.Path.GetFileNameWithoutExtension(Path)
+                };
 
                 return Task.FromResult(table);
             }
