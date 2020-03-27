@@ -27,6 +27,11 @@ namespace LaTeXTableGenerator.Data
                 return new MarkdownTableReader(path);
             }
 
+            if (extension == ".xls" || extension == ".xlsx")
+            {
+                return new ExcelTableReader(path);
+            }
+
             return null;
         }
     }

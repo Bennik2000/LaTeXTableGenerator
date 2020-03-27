@@ -12,9 +12,9 @@ namespace LaTeXTableGenerator.Model
 
         public string TableCaption { get; set; }
 
-        public bool VerticalTableLines { get; set; }
+        public bool VerticalTableLines { get; set; } = true;
 
-        public bool HorizontalTableLines { get; set; }
+        public bool HorizontalTableLines { get; set; } = true;
 
         public Table(List<Row> rows)
         {

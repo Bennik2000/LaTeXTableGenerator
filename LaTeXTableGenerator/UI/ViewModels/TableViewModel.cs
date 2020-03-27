@@ -95,12 +95,6 @@ namespace LaTeXTableGenerator.UI.ViewModels
         public event TableChangedEventHandler TableChanged;
 
 
-        public TableViewModel()
-        {
-            InitializeViewModel();
-            InitializeTable(6, 4);
-        }
-
         public TableViewModel(Table table)
         {
             InitializeViewModel();
@@ -276,28 +270,6 @@ namespace LaTeXTableGenerator.UI.ViewModels
         private void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             TableChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void InitializeTable(int rows, int columns)
-        {
-            Rows.Clear();
-
-            for (int i = 0; i < rows; i++)
-            {
-                var cells = new List<CellViewModel>();
-
-                for (int j = 0; j < columns; j++)
-                {
-                    var cell = new CellViewModel();
-                    cell.PropertyChanged += CellPropertyChanged;
-
-                    cells.Add(cell);
-                }
-
-                Rows.Add(new RowViewModel(cells));
-            }
-
-            TableItemsSource = CreateDataTable(Rows, columns);
         }
 
         private (

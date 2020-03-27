@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using LaTeXTableGenerator.Data;
 using LaTeXTableGenerator.LaTeX;
+using LaTeXTableGenerator.Model;
 using LaTeXTableGenerator.Utils;
 using Microsoft.Win32;
 
@@ -49,7 +51,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
             LoadTableCommand = new RelayCommand(OnLoadTableCommand);
             GenerateLaTeXCommand = new RelayCommand(OnGenerateLaTeXCommand);
             OutputViewModel = new OutputViewModel();
-            TableViewModel = new TableViewModel();
+            TableViewModel = new TableViewModel(new Table(4, 3));
         }
 
         private void OnGenerateLaTeXCommand(object obj)
@@ -68,14 +70,25 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         private async void OnLoadTableCommand(object obj)
         {
-            var dialog = new OpenFileDialog {Multiselect = false};
+            var dialog = new OpenFileDialog
+            {
+                Multiselect = false,
+                Filter = "Markdown files (*.md)|*.md|Excel files|*.xls;*.xlsx|All files (*.*)|*.*"
+            };
 
             var result = dialog.ShowDialog();
 
             if (result ?? false)
             {
-                var table = await new TableLoader().LoadTable(dialog.FileName);
-                TableViewModel = new TableViewModel(table);
+                try
+                {
+                    var table = await new TableLoader().LoadTable(dialog.FileName);
+                    TableViewModel = new TableViewModel(table);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show($"Failed to load table!\n{e.Message}", "Failed to load table");
+                }
             }
         }
 
