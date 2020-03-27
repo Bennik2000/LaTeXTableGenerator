@@ -31,19 +31,24 @@ namespace LaTeXTableGenerator.Data
 
         public Task<Table> ReadTable()
         {
-            var rows = new List<Row>();
-
             var lines = File.ReadAllLines(Path);
 
-            var columns = -1;
+            bool tableStarted = false;
+
+            var rows = new List<Row>();
 
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
 
-                if(string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    if (tableStarted)
+                        break;
+
                     continue;
-                
+                }
+
                 if(!line.Trim().StartsWith("|"))
                     continue;
 
@@ -52,7 +57,9 @@ namespace LaTeXTableGenerator.Data
 
                 try
                 {
-                    var row = ReadRowFromLine(line, columns);
+                    tableStarted = true;
+
+                    var row = ReadRowFromLine(line);
                     rows.Add(row);
                 }
                 catch (Exception e)
@@ -71,7 +78,7 @@ namespace LaTeXTableGenerator.Data
             return Task.FromResult(table);
         }
 
-        private Row ReadRowFromLine(string line, int expectedColumns = -1)
+        private Row ReadRowFromLine(string line)
         {
             // Remove first | and last |
             line = line.Substring(1, line.Length - 2);
@@ -90,9 +97,6 @@ namespace LaTeXTableGenerator.Data
 
                 columns.Add(new Cell(text, false, false));
             }
-
-            if (expectedColumns >= 0 && columns.Count < expectedColumns)
-                throw new Exception("Failed to parse row!");
 
             return new Row(columns);
         }

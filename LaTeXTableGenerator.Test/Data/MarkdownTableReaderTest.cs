@@ -39,5 +39,15 @@ namespace LaTeXTableGenerator.Test.Data
             Assert.AreEqual("eirmod", table.Rows[3].Cells[1].Text);
             Assert.AreEqual("tempor", table.Rows[3].Cells[2].Text);
         }
+
+        [TestMethod]
+        public void Test_ReadValidTable_Two_Tables_Assert_CorrectValues()
+        {
+            var reader = new MarkdownTableReader(@"TestResources\ValidTableMarkdown_two_tables.md");
+
+            var table = reader.ReadTable().Result;
+
+            Assert.AreEqual(4, table.Rows.Count);
+        }
     }
 }
