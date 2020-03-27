@@ -22,8 +22,11 @@ namespace LaTeXTableGenerator.LaTeX
                 {
                     var cellLaTeX = latexEscape.Escape(cell.Text);
 
-                    if (cell.IsBold) cellLaTeX = $"\\textbf{{{cellLaTeX}}}";
-                    if (cell.IsItalic) cellLaTeX = $"\\textit{{{cellLaTeX}}}";
+                    if (!string.IsNullOrWhiteSpace(cellLaTeX))
+                    {
+                        if (cell.IsBold) cellLaTeX = $"\\textbf{{{cellLaTeX}}}";
+                        if (cell.IsItalic) cellLaTeX = $"\\textit{{{cellLaTeX}}}";
+                    }
 
                     builder.Append("    ");
                     builder.Append(!isFirst ? "& " : "  ");
@@ -45,16 +48,15 @@ namespace LaTeXTableGenerator.LaTeX
 
         private void AppendTableHead(StringBuilder builder, Table table)
         {
-            builder.AppendLine(@"\begin{longtable}[l]{");
+            builder.Append(@"\begin{longtable}[l]{");
 
 
             for (int i = 0; i < table.ColumnCount; i++)
             {
-                builder.Append("  ");
                 if (table.VerticalTableLines)
                     builder.Append("|");
 
-                builder.AppendLine("l");
+                builder.Append("l");
 
             }
 

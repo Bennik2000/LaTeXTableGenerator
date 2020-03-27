@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using LaTeXTableGenerator.Data;
 using LaTeXTableGenerator.LaTeX;
 using LaTeXTableGenerator.Utils;
@@ -14,10 +15,18 @@ namespace LaTeXTableGenerator.UI.ViewModels
             set
             {
                 if (Equals(value, _tableViewModel)) return;
+
+                if(_tableViewModel != null) _tableViewModel.TableChanged -= TableChangedEvent;
+                if (value != null) value.TableChanged += TableChangedEvent;
+
                 _tableViewModel = value;
+
+                if(_tableViewModel != null) GenerateLaTeXCommand?.Execute(null);
+
                 OnPropertyChanged();
             }
         }
+
         private TableViewModel _tableViewModel;
 
         public OutputViewModel OutputViewModel
@@ -39,18 +48,22 @@ namespace LaTeXTableGenerator.UI.ViewModels
         {
             LoadTableCommand = new RelayCommand(OnLoadTableCommand);
             GenerateLaTeXCommand = new RelayCommand(OnGenerateLaTeXCommand);
+            OutputViewModel = new OutputViewModel();
             TableViewModel = new TableViewModel();
         }
 
         private void OnGenerateLaTeXCommand(object obj)
         {
-            var laTeX = 
-                new LaTeXOutputGenerator().GenerateTable(TableViewModel.ToTable());
-
-            OutputViewModel = new OutputViewModel()
+            try
             {
-                Code = laTeX
-            };
+                var laTeX =
+                    new LaTeXOutputGenerator().GenerateTable(TableViewModel.ToTable());
+                OutputViewModel.Code = laTeX;
+            }
+            catch (Exception)
+            {
+                OutputViewModel.Code = string.Empty;
+            }
         }
 
         private async void OnLoadTableCommand(object obj)
@@ -64,6 +77,11 @@ namespace LaTeXTableGenerator.UI.ViewModels
                 var table = await new TableLoader().LoadTable(dialog.FileName);
                 TableViewModel = new TableViewModel(table);
             }
+        }
+
+        private void TableChangedEvent(object sender, EventArgs args)
+        {
+            GenerateLaTeXCommand?.Execute(null);
         }
     }
 }

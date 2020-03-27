@@ -3,10 +3,11 @@ using LaTeXTableGenerator.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Threading;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace LaTeXTableGenerator.UI.ViewModels
 {
@@ -34,6 +35,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
                 if (value == _tableCaption) return;
                 _tableCaption = value;
                 OnPropertyChanged();
+                TableChanged?.Invoke(this, EventArgs.Empty);
             }
         }
         private string _tableCaption;
@@ -46,6 +48,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
                 if (value == _verticalTableLines) return;
                 _verticalTableLines = value;
                 OnPropertyChanged();
+                TableChanged?.Invoke(this, EventArgs.Empty);
             }
         }
         private bool _verticalTableLines;
@@ -58,6 +61,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
                 if (value == _horizontalTableLines) return;
                 _horizontalTableLines = value;
                 OnPropertyChanged();
+                TableChanged?.Invoke(this, EventArgs.Empty);
             }
         }
         private bool _horizontalTableLines;
@@ -88,6 +92,9 @@ namespace LaTeXTableGenerator.UI.ViewModels
         public ICommand AddColumnRightCommand { get; private set; }
         public ICommand DeleteColumnCommand { get; private set; }
 
+        public event TableChangedEventHandler TableChanged;
+
+
         public TableViewModel()
         {
             InitializeViewModel();
@@ -99,6 +106,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
             InitializeViewModel();
             FromTable(table);
         }
+
 
         void InitializeViewModel()
         {
@@ -114,6 +122,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
             Rows = new List<RowViewModel>();
         }
 
+
         private void OnDeleteColumnCommand(object obj)
         {
             var range = GetRangeOfSelection();
@@ -127,6 +136,8 @@ namespace LaTeXTableGenerator.UI.ViewModels
             }
 
             TableItemsSource = dataTable;
+
+            TableChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnDeleteRowCommand(object obj)
@@ -142,18 +153,31 @@ namespace LaTeXTableGenerator.UI.ViewModels
             }
 
             TableItemsSource = dataTable;
+
+            TableChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnAddColumnLeftCommand(object obj)
         {
             var range = GetRangeOfSelection();
-            AddColumn(range.minColumn);
+
+            AddColumn(range.hasSelection 
+                ? range.minColumn 
+                : 0);
+
+            TableChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnAddColumnRightCommand(object obj)
         {
             var range = GetRangeOfSelection();
-            AddColumn(range.maxColumn + 1);
+
+            AddColumn(range.hasSelection
+                ? range.maxColumn + 1
+                : TableItemsSource.Columns.Count);
+
+
+            TableChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnAddRowAboveCommand(object obj)
@@ -161,20 +185,28 @@ namespace LaTeXTableGenerator.UI.ViewModels
             var range = GetRangeOfSelection();
 
             AddRow(range.hasSelection ? range.minRow : 0);
+
+            TableChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnAddRowBelowCommand(object obj)
         {
             var range = GetRangeOfSelection();
 
-            AddRow(range.hasSelection ? range.maxRow + 1 : 0);
+            AddRow(range.hasSelection ? range.maxRow + 1 : Rows.Count);
+
+            TableChanged?.Invoke(this, EventArgs.Empty);
         }
+
 
         private void AddColumn(int index)
         {
             foreach (var row in Rows)
             {
-                row.Cells.Insert(index, new CellViewModel());
+                var cell = new CellViewModel();
+                cell.PropertyChanged += CellPropertyChanged;
+
+                row.Cells.Insert(index, cell);
             }
 
             var newColumnCount = TableItemsSource.Columns.Count + 1;
@@ -190,7 +222,10 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
             for (int i = 0; i < TableItemsSource.Columns.Count; i++)
             {
-                cells.Add(new CellViewModel());
+                var cell = new CellViewModel();
+                cell.PropertyChanged += CellPropertyChanged;
+
+                cells.Add(cell);
             }
 
             Rows.Insert(index, new RowViewModel(cells));
@@ -209,8 +244,15 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         private void DeleteColumn(int index, DataTable dataTable)
         {
+            if (dataTable.Columns.Count <= 1) return;
+
             foreach (var row in Rows)
             {
+                if(row.Cells.Count == 0) continue;
+                
+                var cell = row.Cells[index];
+                cell.PropertyChanged -= CellPropertyChanged;
+
                 row.Cells.RemoveAt(index);
             }
 
@@ -219,8 +261,43 @@ namespace LaTeXTableGenerator.UI.ViewModels
 
         private void DeleteRow(int index, DataTable dataTable)
         {
+            if (Rows.Count <= 1) return;
+
+            var row = Rows[index];
+            foreach (var cell in row.Cells)
+            {
+                cell.PropertyChanged -= CellPropertyChanged;
+            }
+
             Rows.RemoveAt(index);
             dataTable.Rows.RemoveAt(index);
+        }
+
+        private void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            TableChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void InitializeTable(int rows, int columns)
+        {
+            Rows.Clear();
+
+            for (int i = 0; i < rows; i++)
+            {
+                var cells = new List<CellViewModel>();
+
+                for (int j = 0; j < columns; j++)
+                {
+                    var cell = new CellViewModel();
+                    cell.PropertyChanged += CellPropertyChanged;
+
+                    cells.Add(cell);
+                }
+
+                Rows.Add(new RowViewModel(cells));
+            }
+
+            TableItemsSource = CreateDataTable(Rows, columns);
         }
 
         private (
@@ -273,26 +350,7 @@ namespace LaTeXTableGenerator.UI.ViewModels
             return (minRow, minColumn, maxRow, maxColumn, true);
         }
 
-        public void InitializeTable(int rows, int columns)
-        {
-            Rows.Clear();
-
-            for (int i = 0; i < rows; i++)
-            {
-                var cells = new List<CellViewModel>();
-
-                for (int j = 0; j < columns; j++)
-                {
-                    cells.Add(new CellViewModel());
-                }
-
-                Rows.Add(new RowViewModel(cells));
-            }
-
-            TableItemsSource = CreateDataTable(Rows, columns);
-        }
-
-        public DataTable CreateDataTable(IEnumerable<RowViewModel> rows, int columns)
+        private DataTable CreateDataTable(IEnumerable<RowViewModel> rows, int columns)
         {
             var dataTable = new DataTable();
 
@@ -321,8 +379,12 @@ namespace LaTeXTableGenerator.UI.ViewModels
             TableItemsSource.Clear();
 
             Rows = table.Rows.Select(t =>
-                new RowViewModel(t.Cells.Select(c =>
-                    new CellViewModel(c)))).ToList();
+                new RowViewModel(t.Cells.Select((c) =>
+                {
+                    var cell = new CellViewModel(c);
+                    cell.PropertyChanged += CellPropertyChanged;
+                    return cell;
+                }))).ToList();
 
             TableItemsSource = CreateDataTable(Rows, table.ColumnCount);
         }
@@ -341,4 +403,6 @@ namespace LaTeXTableGenerator.UI.ViewModels
             return table;
         }
     }
+
+    public delegate void TableChangedEventHandler(object sender, EventArgs args);
 }
