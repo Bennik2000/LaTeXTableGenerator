@@ -23,9 +23,9 @@
         <converter:DataRowViewConverter x:Key="DataRowViewConverter" />
         <DataTemplate x:Key="CellDataTemplate">
             <TextBlock Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                       Margin="5, 10"
-                       Height="20"
-                       VerticalAlignment="Center"
+                       Margin="2, 10"
+                       MinHeight="25"
+                       VerticalAlignment="Stretch"
                        DataContext="{Binding
                 RelativeSource={RelativeSource AncestorType=DataGridCell}, 
                 Converter={StaticResource DataRowViewConverter}}">
@@ -50,10 +50,12 @@
         <DataTemplate x:Key="EditCellDataTemplate">
             <TextBox FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                      Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                     Margin="5, 10"
-                     Height="20"
-                     VerticalAlignment="Center"
+                     Margin="2, 10"
+                     MinHeight="25"
+                     VerticalAlignment="Stretch"
                      VerticalContentAlignment="Center"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
                      DataContext="{Binding
                 RelativeSource={RelativeSource AncestorType=DataGridCell}, 
                 Converter={StaticResource DataRowViewConverter}}">

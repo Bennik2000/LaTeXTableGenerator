@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Table = LaTeXTableGenerator.Model.Table;
 
@@ -79,9 +80,13 @@ namespace LaTeXTableGenerator.Data
 
             var columns = new List<Cell>();
 
+            var regex = new Regex(@"<br[ ]*\/>");
+
             foreach (var part in parts)
             {
                 var text = part.Trim();
+
+                text = regex.Replace(text, "\n");
 
                 columns.Add(new Cell(text, false, false));
             }

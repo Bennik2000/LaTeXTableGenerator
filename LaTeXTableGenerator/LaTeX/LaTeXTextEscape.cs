@@ -20,10 +20,13 @@ namespace LaTeXTableGenerator.LaTeX
                 {"#", @"\#" },
                 {"&", @"\&" },
                 {"§", @"\S{}" },
+                {"\n", @"\newline{}" },
                 {"<", @"\textless{} " },
                 {">", @"\textgreater{} " },
                 {"|", @"\textbar{} " },
             };
+
+            text = text.Replace("\r", "");
 
             foreach (var escapePair in dictionary)
             {
