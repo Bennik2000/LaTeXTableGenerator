@@ -5,7 +5,7 @@ This little tool assists with creating tables in LaTeX.
 Features:
 
 - Load tables from Markdown or Excel files
-- Edit the tables shape and cells
+- Edit the shape and the content of the table
 - Generate the LaTeX code for the table
 
 
