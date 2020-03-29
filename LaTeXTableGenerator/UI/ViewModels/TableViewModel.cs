@@ -1,13 +1,14 @@
-﻿using LaTeXTableGenerator.Model;
-using LaTeXTableGenerator.Utils;
+﻿using LaTeXTableGenerator.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Table = LaTeXTableGenerator.Model.Table;
 
 namespace LaTeXTableGenerator.UI.ViewModels
 {
@@ -65,8 +66,21 @@ namespace LaTeXTableGenerator.UI.ViewModels
             }
         }
         private bool _horizontalTableLines;
+        
+        public ObservableCollection<object> SelectedCells
+        {
+            get => _selectedCells;
+            set
+            {
+                if (Equals(value, _selectedCells)) return;
 
-        public ObservableCollection<object> SelectedCells { get; set; }
+                if (_selectedCells != null) _selectedCells.CollectionChanged -= OnSelectedCellsChanged;
+                _selectedCells = value;
+                if (_selectedCells != null) _selectedCells.CollectionChanged += OnSelectedCellsChanged;
+                OnPropertyChanged();
+            }
+        }
+        private ObservableCollection<object> _selectedCells;
 
         private IEnumerable<CellViewModel> SelectedCellsViewModels =>
             SelectedCells?
@@ -192,6 +206,11 @@ namespace LaTeXTableGenerator.UI.ViewModels
             TableChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        private void OnSelectedCellsChanged(object sender, EventArgs args)
+        {
+            OnPropertyChanged(nameof(ContextMenuItalicChecked));
+            OnPropertyChanged(nameof(ContextMenuBoldChecked));
+        }
 
         private void AddColumn(int index)
         {

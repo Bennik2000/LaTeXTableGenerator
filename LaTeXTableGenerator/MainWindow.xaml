@@ -153,6 +153,21 @@
                                    Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png"
                                    LargeIcon="pack://application:,,,/LaTeXTableGenerator;component/Resources/DeleteColumn.png" />
                 </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Cell">
+
+                    <fluent:ToggleButton Header="Italic"
+                                         Size="Middle"
+                                         Width="75"
+                                         IsChecked="{Binding TableViewModel.ContextMenuItalicChecked}"
+                                         Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/Italic.png"/>
+                    <fluent:ToggleButton Header="Bold"
+                                         Size="Middle"
+                                         Width="75"
+                                         IsChecked="{Binding TableViewModel.ContextMenuBoldChecked}"
+                                         Icon="pack://application:,,,/LaTeXTableGenerator;component/Resources/Bold.png" />
+
+                </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
 
@@ -173,25 +188,8 @@
                   EnableColumnVirtualization="False"
                   SelectionUnit="Cell">
             <b:Interaction.Behaviors>
-                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=TwoWay}"/>
-            </b:Interaction.Behaviors> 
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem IsChecked="{Binding TableViewModel.ContextMenuBoldChecked}"
-                              IsCheckable="True">
-                        <MenuItem.Header>
-                            <TextBlock Text="Bold"
-                                       FontWeight="Bold"/>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem IsChecked="{Binding TableViewModel.ContextMenuItalicChecked}"
-                              IsCheckable="True">
-                        <MenuItem.Header>
-                            <TextBlock Text="Italic" FontStyle="Italic"/>
-                        </MenuItem.Header>
-                    </MenuItem>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
+                <behaviors:MultiSelectBehavior SelectedItems="{Binding TableViewModel.SelectedCells, Mode=TwoWay}" />
+            </b:Interaction.Behaviors>
         </DataGrid>
 
 
