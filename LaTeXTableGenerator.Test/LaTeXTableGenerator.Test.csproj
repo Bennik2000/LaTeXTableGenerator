@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ExcelTableReaderTest.cs" />
     <Compile Include="Data\MarkdownTableReaderTest.cs" />
     <Compile Include="LaTeX\LaTeXOutputGeneratorTest.cs" />
     <Compile Include="LaTeX\LaTeXTextEscapeTest.cs" />
@@ -56,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="TestResources\ValidTableExcel.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestResources\ValidTableMarkdown_two_tables.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
