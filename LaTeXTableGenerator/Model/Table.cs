@@ -80,52 +80,5 @@ namespace LaTeXTableGenerator.Model
             var row = new Row(cells);
             return row;
         }
-
-        public void AddRow(int index = -1)
-        {
-            if (index < 0)
-            {
-                Rows.Add(GenerateRow(ColumnCount));
-            }
-            else
-            {
-                Rows.Insert(index, GenerateRow(ColumnCount));
-            }
-
-            RowCount++;
-        }
-
-        public void AddColumn(int index = -1)
-        {
-            foreach (var row in Rows)
-            {
-                if (index < 0)
-                {
-                    row.Cells.Add(new Cell());
-                }
-                else
-                {
-                    row.Cells.Insert(index, new Cell());
-                }
-            }
-
-            ColumnCount++;
-        }
-
-        public void RemoveRow(int index)
-        {
-            Rows.RemoveAt(index);
-            RowCount--;
-        }
-
-        public void RemoveColumn(int index)
-        {
-            foreach (var row in Rows)
-            {
-                row.Cells.RemoveAt(index);
-            }
-
-            ColumnCount--;
-        }
     }
 }

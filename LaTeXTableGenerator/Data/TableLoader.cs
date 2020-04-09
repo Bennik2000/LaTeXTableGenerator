@@ -32,6 +32,11 @@ namespace LaTeXTableGenerator.Data
                 return new ExcelTableReader(path);
             }
 
+            if (extension == ".tex")
+            {
+                return new LaTeXTableReader(path);
+            }
+
             return null;
         }
     }

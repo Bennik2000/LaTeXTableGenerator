@@ -81,6 +81,7 @@
     </ApplicationDefinition>
     <Compile Include="Data\ExcelTableReader.cs" />
     <Compile Include="Data\ITableReader.cs" />
+    <Compile Include="Data\LaTeXTableReader.cs" />
     <Compile Include="Data\MarkdownTableReader.cs" />
     <Compile Include="Data\TableLoader.cs" />
     <Compile Include="LaTeX\LaTeXTextEscape.cs" />

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LaTeXTableGenerator.LaTeX;
+﻿using LaTeXTableGenerator.LaTeX;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace LaTeXTableGenerator.Test.LaTeX
 {
