@@ -61,7 +61,16 @@
     <None Include="TestResources\ValidTableExcel.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestResources\ValidTableLaTeX.tex">
+    <None Include="TestResources\ValidTableLaTeX_4_bold_italic.tex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestResources\ValidTableLaTeX_3.tex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestResources\ValidTableLaTeX_2.tex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestResources\ValidTableLaTeX_1.tex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TestResources\ValidTableMarkdown_two_tables.md">

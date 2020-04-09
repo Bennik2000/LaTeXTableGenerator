@@ -22,30 +22,31 @@
         <commands:CopyToClipboardCommand x:Key="CopyToClipboardCommand"/>
         <converter:DataRowViewConverter x:Key="DataRowViewConverter" />
         <DataTemplate x:Key="CellDataTemplate">
-            <TextBlock Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                       Margin="2, 10"
-                       MinHeight="25"
-                       VerticalAlignment="Stretch"
-                       DataContext="{Binding
+            <Border MinHeight="45">
+                <TextBlock Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                           Margin="5, 10"
+                           VerticalAlignment="Center"
+                           DataContext="{Binding
                 RelativeSource={RelativeSource AncestorType=DataGridCell}, 
                 Converter={StaticResource DataRowViewConverter}}">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsBold}"
-                                         Value="True">
-                                <Setter Property="FontWeight"
-                                        Value="Bold" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsItalic}"
-                                         Value="True">
-                                <Setter Property="FontStyle"
-                                        Value="Italic" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsBold}"
+                                             Value="True">
+                                    <Setter Property="FontWeight"
+                                            Value="Bold" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsItalic}"
+                                             Value="True">
+                                    <Setter Property="FontStyle"
+                                            Value="Italic" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Border>
         </DataTemplate>
         <DataTemplate x:Key="EditCellDataTemplate">
             <TextBox FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"

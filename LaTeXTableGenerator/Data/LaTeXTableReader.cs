@@ -1,4 +1,5 @@
-﻿using LaTeXTableGenerator.Model;
+﻿using System.CodeDom;
+using LaTeXTableGenerator.Model;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,15 @@ namespace LaTeXTableGenerator.Data
 
         private const string TableNewColumnRegex = @"(?<!\\)(&)";
 
+        private const string HlineRegex = @"(\\hline)";
+
+        private const string TextbfRegex = @"\\textbf{([^}.]*)}";
+
+        private const string TextitRegex = @"\\textit{([^}.]*)}";
+
+
         public string Path { get; set; }
+
 
         public LaTeXTableReader(string path)
         {
@@ -42,11 +51,11 @@ namespace LaTeXTableGenerator.Data
 
             foreach (var row in rows)
             {
-                var columns = SplitIntoColumns(row);
+                var columns = SplitIntoColumns(ExtractRow(row));
 
-                var tableColumns = columns
-                    .Select(column => new Cell(column, false, false))
-                    .ToList();
+                if(row == rows.Last() && columns.Length <= 1) continue;
+
+                var tableColumns = columns.Select(ExtractCell).ToList();
 
                 tableRows.Add(new Row(tableColumns));
             }
@@ -95,15 +104,57 @@ namespace LaTeXTableGenerator.Data
 
         private string[] SplitIntoRows(string tableContent)
         {
-            return RegexSplitAndTrim(tableContent, new Regex(TableNewLineRegex));
+            return RegexSplit(tableContent, new Regex(TableNewLineRegex));
+        }
+
+        private string ExtractRow(string row)
+        {
+            var hLineMatcher = new Regex(HlineRegex);
+            row = hLineMatcher.Replace(row, "");
+            row = row.Trim();
+
+            return row;
+        }
+
+        private Cell ExtractCell(string cell)
+        {
+            var content = cell.Trim();
+
+            var textbfMatcher = new Regex(TextbfRegex);
+            var textitMatcher = new Regex(TextitRegex);
+
+            var italicMatch = textitMatcher.Match(cell);
+            var boldMatch = textbfMatcher.Match(cell);
+
+            var bold = boldMatch.Success;
+            var italic = italicMatch.Success;
+
+            if (bold && italic)
+            {
+                var inner = boldMatch.Length < italicMatch.Length ? boldMatch : italicMatch;
+
+                cell = inner.Groups[1].Value;
+            }
+            else if (bold) 
+            {
+                cell = boldMatch.Groups[1].Value;
+            }
+            else if (italic) 
+            {
+                cell = italicMatch.Groups[1].Value;
+            }
+
+            cell = cell.Trim();
+
+            return new Cell(cell, bold, italic);
         }
 
         private string[] SplitIntoColumns(string row)
         {
-            return RegexSplitAndTrim(row, new Regex(TableNewColumnRegex));
+            return RegexSplit(row, new Regex(TableNewColumnRegex));
         }
 
-        private static string[] RegexSplitAndTrim(string text, Regex matcher)
+        private static string[] RegexSplit(string text, Regex matcher)
         {
             var parts = new List<string>();
 
@@ -113,12 +164,12 @@ namespace LaTeXTableGenerator.Data
             {
                 var row = text.Substring(currentIndex, match.Index - currentIndex);
 
-                parts.Add(row.Trim());
+                parts.Add(row);
 
                 currentIndex = match.Index + match.Length;
             }
 
-            parts.Add(text.Substring(currentIndex).Trim());
+            parts.Add(text.Substring(currentIndex));
 
             return parts.ToArray();
         }

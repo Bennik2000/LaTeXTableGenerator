@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using LaTeXTableGenerator.Model;
 using System.Text;
 
@@ -30,15 +31,20 @@ namespace LaTeXTableGenerator.LaTeX
 
                     builder.Append("    ");
                     builder.Append(!isFirst ? "& " : "  ");
-                    builder.AppendLine(cellLaTeX);
+                    builder.Append(cellLaTeX + " ");
+
+                    if (cell != row.Cells.Last())
+                        builder.AppendLine();
 
                     isFirst = false;
                 }
 
-                builder.AppendLine(@"\tabularnewline");
+                builder.Append(@"\\ ");
 
-                if (table.HorizontalTableLines) 
+                if (table.HorizontalTableLines)
                     builder.AppendLine(@"\hline");
+                else
+                    builder.AppendLine();
             }
 
             AppendTableFooter(builder, table);
