@@ -41,14 +41,15 @@ namespace LaTeXTableGenerator.Model
 
             var columnCount = rows[0].Cells.Count;
 
+            if (columnCount == 0)
+                throw new ArgumentException("There must be at least one column!");
+
+
             for (int i = 1; i < rows.Count; i++)
             {
                 if (rows[i].Cells.Count != columnCount)
                     throw new ArgumentException("All rows must have the same count of columns!");
             }
-
-            if (columnCount == 0)
-                throw new ArgumentException("There must be at least one column!");
 
             ColumnCount = columnCount;
             RowCount = rows.Count;
