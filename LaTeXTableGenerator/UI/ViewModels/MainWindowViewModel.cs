@@ -73,7 +73,11 @@ namespace LaTeXTableGenerator.UI.ViewModels
             var dialog = new OpenFileDialog
             {
                 Multiselect = false,
-                Filter = "Markdown files (*.md)|*.md|Excel files|*.xls;*.xlsx|LaTeX files (*.tex)|*.tex|All files (*.*)|*.*"
+                Filter = "All supported files (*.md, *.xls, *.xlsx, *.tex)|*.md;*.xls;*.xlsx;*.tex|" +
+                         "Markdown files (*.md)|*.md|" +
+                         "Excel files (*.xls, *.xlsx)|*.xls;*.xlsx|" +
+                         "LaTeX files (*.tex)|*.tex|" +
+                         "All files (*.*)|*.*"
             };
 
             var result = dialog.ShowDialog();

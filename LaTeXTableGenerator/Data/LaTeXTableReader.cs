@@ -28,6 +28,7 @@ namespace LaTeXTableGenerator.Data
 
         private const string TextitRegex = @"\\textit{([^}.]*)}";
 
+        private const string CaptionRegex = @"\\caption{(.*)}";
 
         public string Path { get; set; }
 
@@ -41,11 +42,11 @@ namespace LaTeXTableGenerator.Data
         {
             var fileContent = File.ReadAllText(Path);
 
-            var tableString = ExtractTableLaTeXFromFile(fileContent);
+            var extracted = ExtractTableLaTeXFromFile(fileContent);
 
-            if (string.IsNullOrWhiteSpace(tableString)) return null;
+            if (string.IsNullOrWhiteSpace(extracted.table)) return null;
 
-            var rows = SplitIntoRows(tableString);
+            var rows = SplitIntoRows(extracted.table);
 
             var tableRows = new List<Row>();
 
@@ -60,21 +61,24 @@ namespace LaTeXTableGenerator.Data
                 tableRows.Add(new Row(tableColumns));
             }
 
-            return Task.FromResult(new Table(tableRows));
+            return Task.FromResult(new Table(tableRows)
+            {
+                TableCaption = extracted.caption
+            });
         }
 
-        private string ExtractTableLaTeXFromFile(string fileContent)
+        private (string table, string caption) ExtractTableLaTeXFromFile(string fileContent, string caption = null)
         {
             var tableBeginMatcher = new Regex(TableBeginRegex);
             var tableBeginMatch = tableBeginMatcher.Match(fileContent);
 
-            if (!tableBeginMatch.Success) return null;
+            if (!tableBeginMatch.Success) return (null, null);
 
 
             var tableEndMatcher = new Regex(TableEndRegex);
             var tableEndMatch = tableEndMatcher.Match(fileContent, tableBeginMatch.Index);
 
-            if (!tableEndMatch.Success) return null;
+            if (!tableEndMatch.Success) return (null, null);
 
 
             // Search the matching \end{...} statement
@@ -82,12 +86,15 @@ namespace LaTeXTableGenerator.Data
             {
                 tableEndMatch = tableEndMatcher.Match(fileContent, tableEndMatch.Index + tableEndMatch.Length);
 
-                if (!tableEndMatch.Success) return null;
+                if (!tableEndMatch.Success) return (null, null);
             }
-
 
             var tableContent = fileContent.Substring(tableBeginMatch.Index + tableBeginMatch.Length, 
                 tableEndMatch.Index - tableBeginMatch.Index - tableBeginMatch.Length);
+
+
+            var innerCaption = ExtractCaption(tableContent) ?? caption;
+
 
             // Remove the {r|l|c|c} part of the table definition
             var tableColumnDefinitionMatcher = new Regex(TableColumnDefinitionRegex);
@@ -95,11 +102,21 @@ namespace LaTeXTableGenerator.Data
 
 
             // Continue to extract table content until we are at the most inner table
-            var subContent = ExtractTableLaTeXFromFile(tableContent);
+            var subContent = ExtractTableLaTeXFromFile(tableContent, innerCaption);
 
-            if (subContent == null) return tableContent;
-            
+            if (subContent.table == null) return (tableContent, innerCaption);
+
             return subContent;
+        }
+
+        private string ExtractCaption(string tableContent)
+        {
+            var captionRegexMatcher = new Regex(CaptionRegex);
+            var match = captionRegexMatcher.Match(tableContent);
+
+            if (match.Success) return match.Groups[1].Value;
+
+            return null;
         }
 
         private string[] SplitIntoRows(string tableContent)

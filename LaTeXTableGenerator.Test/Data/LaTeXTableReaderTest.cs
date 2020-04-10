@@ -54,7 +54,6 @@ namespace LaTeXTableGenerator.Test.Data
 
                 Console.WriteLine("-> OK");
             }
-
         }
 
         [TestMethod]
@@ -76,7 +75,30 @@ namespace LaTeXTableGenerator.Test.Data
             Assert.AreEqual("sit", table.Rows[0].Cells[2].Text);
             Assert.IsTrue(table.Rows[0].Cells[2].IsItalic);
             Assert.IsFalse(table.Rows[0].Cells[2].IsBold);
+        }
 
+        [TestMethod]
+        public void Test_ReadValidTable_Assert_CorrectCaption()
+        {
+            var testFiles = new List<string>()
+            {
+                @"TestResources\ValidTableLaTeX_1.tex",
+                @"TestResources\ValidTableLaTeX_2.tex",
+                @"TestResources\ValidTableLaTeX_3.tex",
+            };
+
+            foreach (var testFile in testFiles)
+            {
+                Console.WriteLine($"Testing file {testFile}");
+
+                var reader = new LaTeXTableReader(testFile);
+
+                var table = reader.ReadTable().Result;
+
+                Assert.AreEqual("Lorem caption", table.TableCaption);
+
+                Console.WriteLine("-> OK");
+            }
         }
     }
 }
